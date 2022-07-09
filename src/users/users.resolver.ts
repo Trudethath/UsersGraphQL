@@ -14,28 +14,26 @@ export class UsersResolver {
 
   @Query(() => User)
   getUser(@Args('id', { type: () => Int }) id: number): Promise<User> {
-    return this.usersService.getUser(id);
+    const user = this.usersService.findOne(id);
+    return user;
   }
 
   @Query(() => [User], { name: 'users', nullable: 'items' })
   getUsers(): Promise<User[]> {
-    return this.usersService.getUsers();
+    return this.usersService.findAll();
   }
 
   @Mutation(() => User)
   createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    return this.usersService.createUser(createUserInput);
+    return this.usersService.create(createUserInput);
   }
 
-  // @Mutation(() => User)
-  // updateUser(@Args('updateUserData') updateUserData: UpdateUserInput): User {
-  //   return this.usersService.updateUser(updateUserData);
-  // }
-
-  // @Mutation(() => User)
-  // deleteUser(@Args('deleteUserData') deleteUserData: DeleteUserInput): User {
-  //   return this.usersService.deleteUser(deleteUserData);
-  // }
+  @Mutation(() => User)
+  updateUser(@Args('id', { type: () => Int }) id: number): Promise<User> {
+    const user = this.usersService.findOne(id);
+    console.log(user);
+    return user;
+  }
 }
