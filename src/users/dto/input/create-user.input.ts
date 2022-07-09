@@ -11,4 +11,7 @@ export class CreateUserInput {
   @Field()
   @IsNotEmpty()
   age: number;
+
+  @Field({ nullable: true })
+  isSubscribed: boolean;
 }

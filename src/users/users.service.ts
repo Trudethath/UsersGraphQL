@@ -6,48 +6,48 @@ import { UpdateUserInput } from './dto/input/update-user.input';
 import { getUserArgs } from './dto/args/get-user.args';
 import { getUsersArgs } from './dto/args/get-users.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
+  // private users: User[] = [];
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
-  public createUser(createUserData: CreateUserInput): User {
-    const user: User = {
-      userId: uuidv4(),
-      ...createUserData,
-    };
+  createUser(createUserData: CreateUserInput): Promise<User> {
+    const newUser = this.userRepository.create(createUserData);
 
-    this.users.push(user);
-
-    return user;
+    return this.userRepository.save(newUser);
   }
 
-  public updateUser(updateUserData: UpdateUserInput): User {
-    const user = this.users.find(
-      (user) => user.userId === updateUserData.userId,
-    );
-    Object.assign(user, updateUserData);
+  // public updateUser(updateUserData: UpdateUserInput): User {
+  //   const user = this.users.find(
+  //     (user) => user.userId === updateUserData.userId,
+  //   );
+  //   Object.assign(user, updateUserData);
 
-    return user;
+  //   return user;
+  // }
+
+  // public getUser(getUserArgs: getUserArgs): User {
+  //   return this.users.find((user) => user.userId === getUserArgs.userId);
+  // }
+
+  public getUsers(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
-  public getUser(getUserArgs: getUserArgs): User {
-    return this.users.find((user) => user.userId === getUserArgs.userId);
-  }
+  // public deleteUser(deleteUserData: DeleteUserInput): User {
+  //   const userIndex = this.users.findIndex(
+  //     (user) => user.userId === deleteUserData.userId,
+  //   );
 
-  public getUsers(getUsersArgs: getUsersArgs): User[] {
-    return getUsersArgs.userIds.map((userId) => this.getUser({ userId }));
-  }
+  //   const user = this.users[userIndex];
 
-  public deleteUser(deleteUserData: DeleteUserInput): User {
-    const userIndex = this.users.findIndex(
-      (user) => user.userId === deleteUserData.userId,
-    );
+  //   this.users.splice(userIndex);
 
-    const user = this.users[userIndex];
-
-    this.users.splice(userIndex);
-
-    return user;
-  }
+  //   return user;
+  // }
 }
