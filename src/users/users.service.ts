@@ -8,6 +8,7 @@ import { getUsersArgs } from './dto/args/get-users.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Args, Int } from '@nestjs/graphql';
 
 @Injectable()
 export class UsersService {
@@ -31,12 +32,18 @@ export class UsersService {
   //   return user;
   // }
 
+  getUser(userId: number): Promise<User> {
+    const user = this.userRepository.findOneBy({ userId });
+    return user;
+  }
+
   // public getUser(getUserArgs: getUserArgs): User {
   //   return this.users.find((user) => user.userId === getUserArgs.userId);
   // }
 
   public getUsers(): Promise<User[]> {
-    return this.userRepository.find();
+    const users = this.userRepository.find();
+    return users;
   }
 
   // public deleteUser(deleteUserData: DeleteUserInput): User {

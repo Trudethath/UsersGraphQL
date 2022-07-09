@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
 import { getUserArgs } from './dto/args/get-user.args';
 import { getUsersArgs } from './dto/args/get-users.args';
 
@@ -12,10 +12,10 @@ import { UsersService } from './users.service';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  // @Query(() => User, { name: 'user', nullable: true })
-  // getUser(@Args() getUserArgs: getUserArgs): User {
-  //   return this.usersService.getUser(getUserArgs);
-  // }
+  @Query(() => User)
+  getUser(@Args('id', { type: () => Int }) id: number): Promise<User> {
+    return this.usersService.getUser(id);
+  }
 
   @Query(() => [User], { name: 'users', nullable: 'items' })
   getUsers(): Promise<User[]> {

@@ -4,9 +4,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 @ObjectType()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'bigint',
+  })
   @Field()
-  userId: string;
+  userId: number;
 
   @Column()
   @Field()
